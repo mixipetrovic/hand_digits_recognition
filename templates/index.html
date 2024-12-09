@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digit Classifier</title>
+</head>
+<body>
+    <h1>Handwritten Digit Classifier</h1>
+    <form id="upload-form" enctype="multipart/form-data" method="POST" action="/predict">
+        <input type="file" name="image" id="image" accept="image/*" required>
+        <button type="submit">Upload Image</button>
+    </form>
+    <h3>Predicted Digit: <span id="result">?</span></h3>
+
+    <script>
+        const form = document.getElementById('upload-form');
+        form.onsubmit = async function (event) {
+            event.preventDefault();
+
+            const formData = new FormData(form);
+            const response = await fetch('/predict', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+            document.getElementById('result').innerText = result.predicted_digit || 'Error';
+        };
+    </script>
+</body>
+</html>
